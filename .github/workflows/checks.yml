@@ -16,8 +16,8 @@ jobs:
       #These are parameters that are passed in the docker
       #login action
         with:
-          username: ${{secret.DOCKERHUB_USER}}
-          password: ${{secret.DOCKERHUB_TOKEN}}
+          username: ${{secrets.DOCKERHUB_USER}}
+          password: ${{secrets.DOCKERHUB_TOKEN}}
       #Checks out our code for this job
       - name: Checkout
         uses: actions/checkout@v2
