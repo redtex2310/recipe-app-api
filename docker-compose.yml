@@ -1,0 +1,17 @@
+version: "3.9"
+
+
+services:
+  app:
+    build:
+      context: . #Builds on current directory
+      args:
+        - DEV=true
+    ports:
+      - "8000:8000" #Maps port 8000 from local machine to port 8000 in server
+    volumes:
+    #Maps local files to server to sync changes
+      - ./app:/app
+    #Command use to run server
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
