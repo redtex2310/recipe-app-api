@@ -14,13 +14,15 @@ services:
       - ./app:/app
     #Command use to run server
     command: >
-      sh -c "python manage.py runserver 0.0.0.0:8000"
+      sh -c "python manage.py wait_for_db &&
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
     environment:
     #They should match the values defined below (db) section
       - DB_HOST=db
       - DB_NAME=devdb
       - DB_USER=devuser
-      - DV_PASS=changeme
+      - DB_PASS=changeme
     #Make sure that db starts first
     depends_on:
       - db
