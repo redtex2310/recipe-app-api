@@ -21,11 +21,20 @@ ARG DEV=false
 # Single run command to keep build more efficient
 RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
+    #Installing postgresql alpine image in order for 
+    #psycopg2 to connect with postgres
+    apk add --update --no-cache postgresql-client &&\
+    #virtual groups packages into .tmp-build-deps to 
+    #remove later
+    apk add --update --no-cache --virtual .tmp-build-deps \
+        build-base postgresql-dev musl-dev &&\
     /py/bin/pip install -r /tmp/requirements.txt && \
     if [ $DEV = "true" ]; \
         then /py/bin/pip install -r /tmp/requirements.dev.txt ; \
     fi && \
     rm -rf /tmp && \
+    #Remove the .tmp-build-deps to keep Docker lightweight
+    apk del .tmp-build-deps && \
     adduser \
         --disabled-password \
         --no-create-home \

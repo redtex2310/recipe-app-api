@@ -15,3 +15,31 @@ services:
     #Command use to run server
     command: >
       sh -c "python manage.py runserver 0.0.0.0:8000"
+    environment:
+    #They should match the values defined below (db) section
+      - DB_HOST=db
+      - DB_NAME=devdb
+      - DB_USER=devuser
+      - DV_PASS=changeme
+    #Make sure that db starts first
+    depends_on:
+      - db
+
+  db:
+  #image from dockerhub
+    image: postgres:13-alpine
+    volumes:
+    #Should matcht the name below
+      - dev-db-data:/var/lib/postgresql/data
+    #Set initial value for the local dev server
+    environment: 
+      - POSTGRES_DB=devdb
+      - POSTGRES_USER=devuser
+      - POSTGRES_PASSWORD=changeme
+
+
+#Adding volumes. 
+volumes:
+#Name of volume. no need to add name as docker compose will 
+#take care of it.
+  dev-db-data: 
