@@ -32,6 +32,20 @@ class UserSerializers(serializers.ModelSerializer):
         # ie password length < 5, method iwll not be called
         return get_user_model().objects.create_user(**validated_data)
 
+    def update(self, instance, validated_data):
+        """Update and return user."""
+        # Remove password from the dictionary
+        password = validated_data.pop('password', None)
+        # Calls update method from the model serializer base class
+        # Updates the user object
+        user = super().update(instance, validated_data)
+
+        # If user specifes password
+        if password:
+            user.set_password(password)
+            user.save()
+
+        return user
 
 
 class AuthTokenSerializer(serializers.Serializer):
